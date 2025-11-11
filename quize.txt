@@ -1,4 +1,15 @@
-// クイズデータ
+// DOM要素の取得
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+const scoreEl = document.getElementById('score');
+const livesEl = document.getElementById('lives');
+const progressEl = document.getElementById('progress');
+const nextBtn = document.getElementById('next-btn');
+const resultArea = document.getElementById('result-area');
+const finalScoreEl = document.getElementById('final-score');
+const restartBtn = document.getElementById('restart-btn');
+
+// クイズデータ (問題、選択肢、正解)
 const quizData = [
     {
         question: "日本で一番高い山は何ですか？",
@@ -6,102 +17,129 @@ const quizData = [
         answer: "富士山"
     },
     {
-        question: "本州と四国を結ぶ橋のうち、最も東にあるのはどれですか？",
-        options: ["瀬戸大橋", "来島海峡大橋", "明石海峡大橋", "大鳴門橋"],
-        answer: "明石海峡大橋"
+        question: "日本の首都はどこですか？",
+        options: ["大阪", "京都", "東京", "名古屋"],
+        answer: "東京"
     },
     {
-        question: "日本で最も面積の大きい都道府県はどこですか？",
-        options: ["岩手県", "福島県", "長野県", "北海道"],
-        answer: "北海道"
+        question: "日本で一番大きい湖は何ですか？",
+        options: ["霞ヶ浦", "琵琶湖", "サロマ湖", "猪苗代湖"],
+        answer: "琵琶湖"
     }
-    // ここにクイズデータを追加してください（合計15問推奨）
+    // ここに問題を追加
 ];
 
+// 状態変数
 let currentQuestionIndex = 0;
 let score = 0;
-const totalQuestions = 15; // アプリの総問題数（quizDataの数に合わせて調整してください）
+let lives = 3;
+const totalQuestions = 15; // 画像に合わせて15問に設定 (データは3問分)
 
-// DOM要素の取得
-const questionText = document.getElementById('question-text');
-const optionsContainer = document.getElementById('options-container');
-const scoreDisplay = document.getElementById('score');
-const currentQuestionDisplay = document.getElementById('current-question');
-const totalQuestionsDisplay = document.getElementById('total-questions');
+// 初期化
+function initGame() {
+    currentQuestionIndex = 0;
+    score = 0;
+    lives = 3;
+    resultArea.classList.add('hide');
+    nextBtn.classList.add('hide');
+    optionsContainer.classList.remove('hide');
+    questionText.classList.remove('hide');
+    updateStats();
+    showQuestion();
+}
 
-// 初期設定
-totalQuestionsDisplay.textContent = totalQuestions;
-
-// 問題を表示する関数
-function loadQuestion() {
-    // 全問終了後の処理
-    if (currentQuestionIndex >= totalQuestions || currentQuestionIndex >= quizData.length) {
-        questionText.textContent = `クイズ終了！最終スコアは ${score} 点です。`;
-        optionsContainer.innerHTML = '';
-        currentQuestionDisplay.textContent = Math.min(currentQuestionIndex + 1, totalQuestions); // 15/15など表示
-        return;
+// 問題を表示
+function showQuestion() {
+    // 選択肢をリセット
+    optionsContainer.innerHTML = '';
+    
+    // データが尽きたら最初に戻る（デモ用）
+    if (currentQuestionIndex >= quizData.length) {
+        currentQuestionIndex = 0; 
     }
     
-    // 現在の問題データを取得
-    const currentQuiz = quizData[currentQuestionIndex];
+    const currentQuestion = quizData[currentQuestionIndex];
+    questionText.innerText = currentQuestion.question;
     
-    // 問題文と問題番号の更新
-    questionText.textContent = currentQuiz.question;
-    currentQuestionDisplay.textContent = currentQuestionIndex + 1;
-    
-    // 選択肢コンテナを空にする
-    optionsContainer.innerHTML = '';
+    // 画像の表示に合わせて 1 / 15 のようにする
+    progressEl.innerText = `問題 ${currentQuestionIndex + 1} / ${totalQuestions}`;
 
-    // 選択肢ボタンを作成して追加
-    currentQuiz.options.forEach(option => {
+    // 選択肢ボタンを作成
+    currentQuestion.options.forEach(option => {
         const button = document.createElement('button');
-        button.classList.add('option-button');
-        button.textContent = option;
-        // イベントリスナーを設定
-        button.addEventListener('click', () => checkAnswer(button, option, currentQuiz.answer));
+        button.innerText = option;
+        button.classList.add('option-btn');
+        button.addEventListener('click', () => selectAnswer(button, currentQuestion.answer));
         optionsContainer.appendChild(button);
     });
 }
 
-// 答えをチェックする関数
-function checkAnswer(clickedButton, selectedOption, correctAnswer) {
-    // 全てのボタンを無効化
-    disableOptions();
-
-    if (selectedOption === correctAnswer) {
-        // 正解
-        clickedButton.classList.add('correct');
-        score++;
-        scoreDisplay.textContent = score;
-    } else {
-        // 不正解
-        clickedButton.classList.add('incorrect');
+// 回答を選択
+function selectAnswer(selectedButton, correctAnswer) {
+    // すべてのボタンを無効化
+    Array.from(optionsContainer.children).forEach(btn => {
+        btn.disabled = true;
         // 正解のボタンをハイライト
-        highlightCorrectAnswer(correctAnswer);
-    }
-
-    // 1秒後に次の問題へ
-    setTimeout(() => {
-        currentQuestionIndex++;
-        loadQuestion();
-    }, 1000);
-}
-
-// 全てのボタンを無効化する関数
-function disableOptions() {
-    Array.from(optionsContainer.children).forEach(button => {
-        button.classList.add('disabled');
-    });
-}
-
-// 正解のボタンをハイライトする関数
-function highlightCorrectAnswer(correctAnswer) {
-    Array.from(optionsContainer.children).forEach(button => {
-        if (button.textContent === correctAnswer) {
-            button.classList.add('correct');
+        if (btn.innerText === correctAnswer) {
+            btn.classList.add('correct');
         }
     });
+
+    if (selectedButton.innerText === correctAnswer) {
+        // 正解
+        score++;
+        selectedButton.classList.add('correct');
+    } else {
+        // 不正解
+        lives--;
+        selectedButton.classList.add('incorrect');
+    }
+
+    updateStats();
+    
+    // 次へボタンを表示
+    if (currentQuestionIndex + 1 < totalQuestions && lives > 0) {
+        nextBtn.classList.remove('hide');
+    } else {
+        // ゲーム終了
+        showResults();
+    }
 }
 
-// アプリ起動時に最初の問題を読み込む
-loadQuestion();
+// ステータス（スコア・ライフ）を更新
+function updateStats() {
+    scoreEl.innerText = `スコア: ${score}`;
+    
+    let hearts = '';
+    for (let i = 0; i < 3; i++) {
+        hearts += (i < lives) ? '❤️' : '🖤';
+    }
+    livesEl.innerHTML = hearts;
+}
+
+// 次の問題へ
+nextBtn.addEventListener('click', () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex >= totalQuestions || lives <= 0) {
+        showResults();
+    } else {
+        showQuestion();
+        nextBtn.classList.add('hide');
+    }
+});
+
+// 結果表示
+function showResults() {
+    optionsContainer.classList.add('hide');
+    questionText.classList.add('hide');
+    nextBtn.classList.add('hide');
+    
+    finalScoreEl.innerText = score;
+    resultArea.classList.remove('hide');
+}
+
+// リスタート
+restartBtn.addEventListener('click', initGame);
+
+// ゲーム開始
+initGame();
