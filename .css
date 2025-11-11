@@ -18,63 +18,18 @@ body {
     padding: 30px;
 }
 
-/* --- ヘッダー・情報 --- */
-.quiz-header {
-    margin-bottom: 20px;
-}
+/* ... ヘッダー・情報スタイル（省略） ... */
+.quiz-header { margin-bottom: 20px; }
+.category { background-color: #e0e0e0; color: #333; padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; }
+.hearts { display: flex; gap: 5px; float: right; margin-top: 5px; }
+.score-info { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 30px; clear: both; }
+.trophy { color: #ff9800; font-size: 18px; font-weight: bold; }
+.question-count { font-size: 16px; color: #666; }
+.question-section { margin-bottom: 30px; }
+#question-text { font-size: 20px; font-weight: 500; color: #333; line-height: 1.6; margin: 0; }
 
-.category {
-    background-color: #e0e0e0;
-    color: #333;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 15px;
-}
 
-.hearts {
-    display: flex;
-    gap: 5px;
-    float: right; /* ハートを右寄せ */
-}
-
-.score-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
-    margin-top: 20px;
-    clear: both; /* float解除 */
-}
-
-.trophy {
-    color: #ff9800;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.question-count {
-    font-size: 16px;
-    color: #666;
-}
-
-/* --- 問題文 --- */
-.question-section {
-    margin-bottom: 30px;
-}
-
-#question-text {
-    font-size: 20px;
-    font-weight: 500;
-    color: #333;
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* --- 選択肢ボタン (最も重要な修正箇所) --- */
+/* --- 選択肢ボタンのスタイル --- */
 .options-section {
     display: flex;
     flex-direction: column;
@@ -82,7 +37,7 @@ body {
 }
 
 .option-button {
-    /* <button>要素のデフォルトスタイルをリセット */
+    /* クリック可能なボタンとしての基本スタイル */
     width: 100%;
     text-align: left;
     background-color: #ffffff;
@@ -91,13 +46,13 @@ body {
     padding: 15px 20px;
     font-size: 16px;
     color: #333;
-    cursor: pointer;
+    cursor: pointer; /* マウスオーバー時に指のカーソルを表示 */
     transition: background-color 0.2s, border-color 0.2s;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     
-    /* 内部のテキストを横並びにするため */
     display: flex; 
     align-items: center;
+    margin: 0; 
 }
 
 .option-button:hover:not(:disabled) {
@@ -105,7 +60,7 @@ body {
 }
 
 .choice-label {
-    /* A, B, C, D のスタイル */
+    /* A, B, C, D のラベルスタイル */
     background-color: #007bff;
     color: #ffffff;
     font-weight: bold;
@@ -117,11 +72,7 @@ body {
     text-align: center;
 }
 
-.choice-text {
-    font-weight: 500;
-}
-
-/* 回答後のスタイル */
+/* 回答後のスタイル：正解 */
 .option-button.correct {
     background-color: #d4edda;
     border-color: #4CAF50;
@@ -133,6 +84,7 @@ body {
     background-color: #4CAF50;
 }
 
+/* 回答後のスタイル：不正解 */
 .option-button.incorrect {
     background-color: #f8d7da;
     border-color: #f44336;
@@ -143,8 +95,8 @@ body {
     background-color: #f44336;
 }
 
-/* 無効化スタイル */
+/* **ボタン無効化のスタイル（重要）** */
 .option-button:disabled, .option-button.disabled {
-    pointer-events: none; /* クリックイベントを完全に無効化 */
+    pointer-events: none; /* クリックイベントを完全にブロック */
     opacity: 0.7;
 }
