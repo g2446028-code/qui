@@ -1,76 +1,80 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5; /* 背景色 */
+    background-color: #f4f7f6;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-}
-
-.quiz-container {
-    width: 90%;
-    max-width: 600px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 
-/* ヘッダーデザイン */
+.quiz-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+}
+
+/* --- ヘッダー・情報 --- */
 .quiz-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
 }
 
 .category {
     background-color: #e0e0e0;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.9em;
+    color: #333;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
     font-weight: bold;
-    margin-right: auto; /* 左寄せ */
+    display: inline-block;
+    margin-bottom: 15px;
 }
 
 .hearts {
-    margin-left: 10px;
-}
-
-.heart {
-    color: #ff4d4d;
-    font-size: 1.2em;
+    display: flex;
+    gap: 5px;
+    float: right; /* ハートを右寄せ */
 }
 
 .score-info {
-    width: 100%; /* フル幅にして次の行へ */
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
-    font-size: 0.9em;
-}
-
-.trophy, .question-count {
-    color: #555;
-    font-weight: 500;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-top: 20px;
+    clear: both; /* float解除 */
 }
 
 .trophy {
-    color: #ffd700; /* トロフィーの色 */
+    color: #ff9800;
+    font-size: 18px;
+    font-weight: bold;
 }
 
-/* 問題文のデザイン */
+.question-count {
+    font-size: 16px;
+    color: #666;
+}
+
+/* --- 問題文 --- */
 .question-section {
-    padding: 30px 0;
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #333;
+    margin-bottom: 30px;
 }
 
-/* 選択肢ボタンのデザイン */
+#question-text {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- 選択肢ボタン (最も重要な修正箇所) --- */
 .options-section {
     display: flex;
     flex-direction: column;
@@ -78,38 +82,69 @@ body {
 }
 
 .option-button {
+    /* <button>要素のデフォルトスタイルをリセット */
     width: 100%;
-    padding: 15px;
-    font-size: 1em;
     text-align: left;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
+    padding: 15px 20px;
+    font-size: 16px;
+    color: #333;
     cursor: pointer;
     transition: background-color 0.2s, border-color 0.2s;
-    outline: none; /* フォーカス時の青い枠線を消す */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    /* 内部のテキストを横並びにするため */
+    display: flex; 
+    align-items: center;
 }
 
-.option-button:hover {
-    background-color: #e6f7ff;
-    border-color: #91d5ff;
+.option-button:hover:not(:disabled) {
+    border-color: #007bff;
 }
 
-/* 正解・不正解時のスタイル */
-.correct {
-    background-color: #e6ffe6; /* 薄い緑 */
-    border-color: #52c41a; /* 緑 */
-    color: #000;
+.choice-label {
+    /* A, B, C, D のスタイル */
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-right: 15px;
+    min-width: 14px;
+    text-align: center;
+}
+
+.choice-text {
+    font-weight: 500;
+}
+
+/* 回答後のスタイル */
+.option-button.correct {
+    background-color: #d4edda;
+    border-color: #4CAF50;
+    color: #155724;
     font-weight: bold;
 }
 
-.incorrect {
-    background-color: #ffeded; /* 薄い赤 */
-    border-color: #ff4d4f; /* 赤 */
-    color: #000;
-    font-weight: bold;
+.option-button.correct .choice-label {
+    background-color: #4CAF50;
 }
 
-.disabled {
-    pointer-events: none; /* クリック無効 */
+.option-button.incorrect {
+    background-color: #f8d7da;
+    border-color: #f44336;
+    color: #721c24;
+}
+
+.option-button.incorrect .choice-label {
+    background-color: #f44336;
+}
+
+/* 無効化スタイル */
+.option-button:disabled, .option-button.disabled {
+    pointer-events: none; /* クリックイベントを完全に無効化 */
+    opacity: 0.7;
 }
