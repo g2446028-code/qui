@@ -1,122 +1,123 @@
 /* 基本設定 */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f4f7f7;
+    background-color: #f0f2f5;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 20px;
+    padding: 30px;
     min-height: 100vh;
     box-sizing: border-box;
-    color: #333;
 }
 
-.app-container {
+.todo-container {
     width: 100%;
-    max-width: 420px;
+    max-width: 500px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
 }
 
 /* ヘッダー */
-.quiz-header {
-    margin-bottom: 15px;
-    padding: 0 10px;
+.app-header {
+    background-color: #4a90e2; /* テーマカラー */
+    color: white;
+    padding: 20px;
+    text-align: center;
 }
 
-.header-top, .header-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.tag {
-    background-color: #e9e9ed;
-    color: #555;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 6px 12px;
-    border-radius: 16px;
-}
-
-.lives {
+.app-header h1 {
+    margin: 0;
     font-size: 24px;
-    letter-spacing: 2px;
-    color: #ff4757; /* ハートの色 */
 }
 
-.score, .progress {
+/* 入力フォーム */
+.todo-form {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+#todo-input {
+    flex-grow: 1; /* 入力欄が幅いっぱいに広がる */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 15px;
     font-size: 16px;
-    color: #666;
-    font-weight: 500;
+    margin-right: 10px;
+}
+#todo-input:focus {
+    outline: none;
+    border-color: #4a90e2;
 }
 
-/* クイズカード */
-.quiz-card {
-    background-color: #ffffff;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.question {
-    font-size: 18px;
+.add-btn {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 20px;
+    font-size: 16px;
     font-weight: 600;
-    margin-bottom: 20px;
-    line-height: 1.5;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.add-btn:hover {
+    background-color: #357abd;
 }
 
-/* 選択肢 */
-.options {
-    display: grid;
-    gap: 12px; /* 選択肢の間のスペース */
+/* タスク一覧 */
+.task-list-container {
+    padding: 20px;
 }
 
-.option {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 16px;
-    width: 100%;
-    text-align: left;
+#task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.task-item:last-child {
+    border-bottom: none;
+}
+
+/* タスクテキスト */
+.task-text {
+    flex-grow: 1;
     font-size: 16px;
     color: #333;
+    cursor: pointer; /* クリックで完了できるように */
+    user-select: none; /* テキスト選択を防ぐ */
+}
+
+/* 完了済みタスクのスタイル */
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: #999;
+}
+
+/* 削除ボタン */
+.delete-btn {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 50%; /* 丸いボタン */
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    margin-left: 10px;
+    flex-shrink: 0; /* ボタンが縮まないように */
+    transition: background-color 0.2s;
 }
-
-.option:hover {
-    background-color: #f9f9f9;
-    border-color: #c0c0c0;
-}
-
-/* 選択後のスタイル */
-.option.correct {
-    background-color: #e7f9ee;
-    border-color: #28a745;
-    color: #28a745;
-    font-weight: 600;
-}
-
-.option.incorrect {
-    background-color: #fdeeee;
-    border-color: #dc3545;
-    color: #dc3545;
-    font-weight: 600;
-}
-
-/* 選択後はホバー無効 */
-.option:disabled {
-    cursor: not-allowed;
-}
-.option:disabled:hover {
-    background-color: #ffffff;
-    border-color: #e0e0e0;
-}
-.option.correct:disabled:hover {
-    background-color: #e7f9ee;
-    border-color: #28a745;
-}
-.option.incorrect:disabled:hover {
-    background-color: #fdeeee;
-    border-color: #dc3545;
+.delete-btn:hover {
+    background-color: #e03141;
 }
