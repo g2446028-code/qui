@@ -1,40 +1,106 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地理クイズ</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const quizData = [
+    {
+        question: "日本で一番高い山は何ですか？",
+        options: [
+            { text: "富士山", isCorrect: true },
+            { text: "北岳", isCorrect: false },
+            { text: "奥穂高岳", isCorrect: false },
+            { text: "槍ヶ岳", isCorrect: false }
+        ],
+        choiceLabels: ["A", "B", "C", "D"] // 選択肢のラベル
+    }
+    // 必要に応じてここに他の問題を追加できます
+];
 
-    <div class="quiz-container">
-        <header class="quiz-header">
-            <span class="category">地理</span>
-            <div class="hearts">
-                <span class="heart">❤️</span>
-                <span class="heart">❤️</span>
-                <span class="heart">❤️</span>
-            </div>
-            <div class="score-info">
-                <span class="trophy">🏆 スコア: <span id="score">0</span></span>
-                <span class="question-count">問題 <span id="current-question">1</span> / <span id="total-questions">15</span></span>
-            </div>
-        </header>
+let currentQuestionIndex = 0;
+let hasAnswered = false;
 
-        <div class="question-section">
-            <p id="question-text">ここに問題文が表示されます。</p>
-        </div>
+document.addEventListener('DOMContentLoaded', () => {
+    // 問題と選択肢の要素を取得
+    const questionTextElement = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    
+    // スコアと問題数を初期化（今回はデモのため1問目）
+    document.getElementById('total-questions').textContent = quizData.length;
+    document.getElementById('current-question').textContent = currentQuestionIndex + 1;
 
-        <div class="options-section" id="options-container">
-            <button class="option-button">選択肢 A</button>
-            <button class="option-button">選択肢 B</button>
-            <button class="option-button">選択肢 C</button>
-            <button class="option-button">選択肢 D</button>
-        </div>
+    // 初回の問題を表示
+    loadQuestion(currentQuestionIndex);
+});
 
-    </div>
+/**
+ * 指定されたインデックスの問題をロードして表示する
+ * @param {number} index - 表示する問題のインデックス
+ */
+function loadQuestion(index) {
+    hasAnswered = false;
+    const question = quizData[index];
+    const optionsContainer = document.getElementById('options-container');
 
-    <script src="script.js"></script>
-</body>
-</html>
+    // 問題文を設定
+    document.getElementById('question-text').textContent = question.question;
+
+    // 選択肢をクリア
+    optionsContainer.innerHTML = '';
+
+    // 選択肢ボタンを生成
+    question.options.forEach((option, i) => {
+        const button = document.createElement('button');
+        button.classList.add('option-button');
+        
+        // ラベル（A, B, C, D）と山名を組み合わせたテキストを設定
+        const choiceLabel = question.choiceLabels[i];
+        button.innerHTML = `<span class="choice-label">${choiceLabel}</span> <span class="choice-text">${option.text}</span>`;
+        
+        // 正解・不正解の情報をデータ属性として追加
+        button.dataset.correct = option.isCorrect;
+
+        // クリックイベントリスナーを追加
+        button.addEventListener('click', handleAnswer);
+        
+        optionsContainer.appendChild(button);
+    });
+}
+
+/**
+ * 選択肢がクリックされたときの処理
+ * @param {Event} event - クリックイベント
+ */
+function handleAnswer(event) {
+    if (hasAnswered) return; // すでに回答済みなら何もしない
+
+    hasAnswered = true;
+    const clickedButton = event.currentTarget;
+    const isCorrect = clickedButton.dataset.correct === 'true';
+    const allButtons = document.querySelectorAll('.option-button');
+
+    // すべてのボタンからクリックイベントを外し、無効化する
+    allButtons.forEach(button => {
+        button.removeEventListener('click', handleAnswer);
+        button.disabled = true; // HTMLの<button>要素なのでdisabledプロパティが有効
+        button.classList.add('disabled');
+    });
+
+    // 正誤に応じたスタイルを適用
+    if (isCorrect) {
+        clickedButton.classList.add('correct');
+        // スコア更新などの処理をここに追加
+    } else {
+        clickedButton.classList.add('incorrect');
+        // 不正解の場合、正解のボタンもハイライトする
+        const correctAnswerButton = document.querySelector('.option-button[data-correct="true"]');
+        if (correctAnswerButton) {
+            correctAnswerButton.classList.add('correct');
+        }
+    }
+    
+    // 次の問題へ進むなどの処理をここに追加
+    // setTimeout(() => {
+    //     currentQuestionIndex++;
+    //     if (currentQuestionIndex < quizData.length) {
+    //         loadQuestion(currentQuestionIndex);
+    //     } else {
+    //         alert('クイズ終了！');
+    //     }
+    // }, 1500); // 1.5秒後に次の問題へ
+}
