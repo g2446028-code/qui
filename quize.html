@@ -8,34 +8,30 @@
 </head>
 <body>
 
-    <div class="quiz-container">
-        <div class="quiz-header">
-            <span class="subject">地理</span>
-            <div class="stats">
-                <span id="score">スコア: 0</span>
-                <span id="lives">❤️❤️❤️</span>
-                <span id="progress">問題 1 / 15</span>
+    <div class="app-container">
+        <header class="quiz-header">
+            <div class="header-top">
+                <span class="tag">地理</span>
+                <div class="lives">
+                    <span>❤️</span><span>❤️</span><span>❤️</span>
+                </div>
             </div>
-        </div>
-
-        <hr>
-
-        <div id="question-area">
-            <p id="question-text">日本で一番高い山は何ですか？</p>
-        </div>
-
-        <div id="options-container">
+            <div class="header-bottom">
+                <span class="score">🏆 スコア: 0</span>
+                <span class="progress">問題 1 / 15</span>
             </div>
+        </header>
 
-        <div id="feedback-area">
-            <button id="next-btn" class="hide">次の問題へ</button>
-        </div>
-
-        <div id="result-area" class="hide">
-            <h2>ゲーム終了</h2>
-            <p>最終スコア: <span id="final-score">0</span></p>
-            <button id="restart-btn">もう一度挑戦</button>
-        </div>
+        <main class="quiz-card">
+            <h2 class="question">日本で一番高い山は何ですか？</h2>
+            
+            <div class="options">
+                <button class="option" data-answer="true">富士山</button>
+                <button class="option">北岳</button>
+                <button class="option">奥穂高岳</button>
+                <button class="option">槍ヶ岳</button>
+            </div>
+        </main>
     </div>
 
     <script src="script.js"></script>
